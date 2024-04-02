@@ -24,8 +24,11 @@ class SchoolInfo(BaseModel):
     site: str  # 招生网站
     school_site: str  # 学校官网
     content: str  # 介绍
-    province_name: str  # 城市地址
+    province_name: str  # 省
     school_special_num: int  # 专业数量
+    city_name: str  # 市
+    town_name: str  # 区
+    dual_class_name: str  # 如果是双一流这里会有双一流
 
 
 class SchoolInfoData(BaseModel):

@@ -11,6 +11,7 @@ class SchoolSpecial(BaseModel):
     special_id: str
     special_name: str  # 软件工程
     type_name: str  # 本科
+    level3_name: str  # 分类 机械类
 
 
 class SchoolSpecialInfo(BaseModel):
