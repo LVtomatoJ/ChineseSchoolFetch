@@ -1,3 +1,4 @@
+import os
 import threading
 from typing import List
 from fetch import (
@@ -12,6 +13,11 @@ from scheme.school_info import SchoolInfoData
 from scheme.school_special import SchoolSpecial, SchoolSpecialData
 
 import concurrent.futures
+
+
+def check_and_create_folder(folder_path):
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
 
 
 # 定义一个处理任务的函数
@@ -61,6 +67,10 @@ def init_school_task(school_code_info):
 
 # 初始化获取所有学校数据
 def init():
+    check_and_create_folder("data")
+    check_and_create_folder("data/school_info")
+    check_and_create_folder("data/school_special")
+    check_and_create_folder("data/special")
     try:
         data = read_json_to_dict("data/school_code.json")
     except Exception as e:
