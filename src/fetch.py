@@ -2,12 +2,14 @@ import requests
 
 from scheme.school_code import SchoolCodeData
 from scheme.school_info import SchoolInfoData
+from tenacity import retry, stop_after_attempt
 
 headers = {
     "User-Agent": " Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.15",
 }
 
 
+@retry(stop=stop_after_attempt(5))
 def get_school_code_list() -> dict:
     try:
         res = requests.get(
@@ -20,6 +22,7 @@ def get_school_code_list() -> dict:
         raise
 
 
+@retry(stop=stop_after_attempt(5))
 def get_school_info(school_id: str) -> dict:
     try:
         res = requests.get(
@@ -34,6 +37,7 @@ def get_school_info(school_id: str) -> dict:
         raise
 
 
+@retry(stop=stop_after_attempt(5))
 def get_school_special(school_id: str) -> dict:
     try:
         res = requests.get(
@@ -55,7 +59,7 @@ def get_special_info(special_id: str) -> dict:
         )
         return res.json()
     except Exception as e:
-        if(res.status_code==404):
+        if res.status_code == 404:
             # 存在找不到的情况直接返回None跳过
             return None
         print(
