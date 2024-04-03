@@ -15,7 +15,7 @@ class SchoolSpecial(BaseModel):
 
 
 class SchoolSpecialInfo(BaseModel):
-    # 这里key是1的时候是全部的
+    # 这里key是1的时候是全部的 并且有时候不存在1
     special_detail: Dict[int, Union[List[SchoolSpecial], List[Dict], str]]
 
 

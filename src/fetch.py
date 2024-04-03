@@ -70,6 +70,20 @@ def get_special_info(special_id: str) -> dict:
         raise
 
 
+def get_school_logo(school_id: str):
+    try:
+        res = requests.get(
+            f"https://static-data.gaokao.cn/upload/logo/{school_id}.jpg", stream=True
+        )
+        res.raw.decode_content = True
+        return res.raw
+    except Exception as e:
+        print(
+            f"Error occurred while fetching school logo for school ID {school_id}: {e}"
+        )
+        raise
+
+
 # get_school_code_list()
 
 # print(res.request.headers)

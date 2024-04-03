@@ -1,9 +1,11 @@
 import os
+import shutil
 import threading
 from typing import List
 from fetch import (
     get_school_code_list,
     get_school_info,
+    get_school_logo,
     get_school_special,
     get_special_info,
 )
@@ -65,12 +67,26 @@ def init_school_task(school_code_info):
             save_dict_to_json(special_data, f"data/special/{special_id}.json")
 
 
+def get_ont_school_logo(school_code_info):
+    thread_name = threading.current_thread().getName()
+    print(
+        f"当前线程: {thread_name}, 处理任务：{school_code_info.school_id}:{school_code_info.name}"
+    )
+    if not check_file_exist(f"data/school_logo/{school_code_info.school_id}.jpg"):
+        logo_data = get_school_logo(school_code_info.school_id)
+        with open(f"data/school_logo/{school_code_info.school_id}.jpg", "wb") as f:
+            shutil.copyfileobj(logo_data, f)
+        print(f"保存学校logo:{school_code_info.school_id}:{school_code_info.name}")
+
+
 # 初始化获取所有学校数据
 def init():
     check_and_create_folder("data")
     check_and_create_folder("data/school_info")
     check_and_create_folder("data/school_special")
     check_and_create_folder("data/special")
+    check_and_create_folder("data/school_logo")
+
     try:
         data = read_json_to_dict("data/school_code.json")
     except Exception as e:
@@ -80,7 +96,7 @@ def init():
     school_code_info_list = formate_data.data.values()
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         # 并行地处理每个 school_code_info 信息
-        executor.map(init_school_task, school_code_info_list)
+        executor.map(get_ont_school_logo, school_code_info_list)
 
 
 def main():
